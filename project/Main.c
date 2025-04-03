@@ -2,6 +2,7 @@
 #include "libTimer.h"
 #include "led.h"
 #include "buzzer.h"
+#include "stateMachines.h"
 
 int main() {
     configureClocks();
