@@ -4,29 +4,78 @@
 
 char toggle_red()		/* always toggle! */
 {
-  static char state = 0;
+unsigned char p1val = P1IN;  
+  
+    switch (currentState) {
+        case STATE_1:
+            // Red LED on, Green LED off
+            P1OUT |= LED_RED;        
+            P1OUT &= ~LED_GREEN;      
+            
+            // Check for button presses to transition
+            if (p1val & SW1) {
+                currentState = STATE_1; 
+            } else if (p1val & SW2) {
+                currentState = STATE_2;  
+            } else if (p1val & SW3) {
+                currentState = STATE_3;  
+            } else if (p1val & SW4) {
+                currentState = STATE_4; 
+            }
+            break;
+        
+        case STATE_2:
+            // Green LED on, Red LED off
+            P1OUT |= LED_GREEN;      
+            P1OUT &= ~LED_RED;        
+            
+            // Check for button presses to transition
+            if (p1val & SW1) {
+                currentState = STATE_1;  
+            } else if (p1val & SW2) {
+                currentState = STATE_2;  
+            } else if (p1val & SW3) {
+                currentState = STATE_3;  
+            } else if (p1val & SW4) {
+                currentState = STATE_4;  
+            }
+            break;
 
-  switch (state) {
-  case 0:
-    red_on = 1;
-    state = 1;
-    break;
-  case 1:
-    red_on = 0;
-    state = 0;
-    break;
-  }
-  return 1;			/* always changes an led */
-}
+        case STATE_3:
+            // Both LEDs off
+            P1OUT &= ~LED_RED;        
+            P1OUT &= ~LED_GREEN;      
+            
+            // Check for button presses to transition
+            if (p1val & SW1) {
+                currentState = STATE_1; 
+            } else if (p1val & SW2) {
+                currentState = STATE_2;  
+            } else if (p1val & SW3) {
+                currentState = STATE_3; 
+            } else if (p1val & SW4) {
+                currentState = STATE_4;  
+            }
+            break;
 
-char toggle_green()	/* only toggle green if red is on!  */
-{
-  char changed = 0;
-  if (red_on) {
-    green_on ^= 1;
-    changed = 1;
-  }
-  return changed;
+        case STATE_4:
+            // Both LEDs on
+            P1OUT |= LED_RED;         
+            P1OUT |= LED_GREEN;       
+            
+            // Check for button presses to transition
+            if (p1val & SW1) {
+                currentState = STATE_1;  
+            } else if (p1val & SW2) {
+                currentState = STATE_2;  
+            } else if (p1val & SW3) {
+                currentState = STATE_3; 
+            } else if (p1val & SW4) {
+                currentState = STATE_4; 
+            }
+            break;
+    }
+
 }
 
 
