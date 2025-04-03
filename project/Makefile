@@ -11,7 +11,7 @@ AS              = msp430-elf-as
 all: led.elf 
 
 #additional rules for files
-led.elf: ${COMMON_OBJECTS} 
+led.elf: ${COMMON_OBJECTS} Main.o stateMachines.o led.o buzzer.o
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^ ../lib/libTimer.a
 
 load: led.elf
@@ -20,6 +20,10 @@ load: led.elf
 clean:
 	rm -f *.o *.elf
 
-main.o: led.h
+
+buzzer.o: buzzer.c buzzer.h
+led.o: led.c led.h
+stateMachines.o: stateMachines.c stateMachines.h
+
 
 wdInterruptHandler.o:  led.h
